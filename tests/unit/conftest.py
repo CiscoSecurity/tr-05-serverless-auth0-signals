@@ -157,27 +157,33 @@ def auth0_signals_response_unauthorized_creds(secret_key):
 
 @fixture(scope='module')
 def invalid_jwt_expected_payload(route):
-    return expected_payload(route, {
-        'errors': [
-            {'code': PERMISSION_DENIED,
-             'message': 'Invalid Authorization Bearer JWT.',
-             'type': 'fatal'}
-        ],
-        'data': {}
-    })
+    return expected_payload(
+        route,
+        {
+            'errors': [
+                {'code': PERMISSION_DENIED,
+                 'message': 'Invalid Authorization Bearer JWT.',
+                 'type': 'fatal'}
+            ],
+            'data': {}
+        }
+    )
 
 
 @fixture(scope='module')
 def invalid_json_expected_payload(route):
     return expected_payload(
         route,
-        {'errors': [
-            {'code': INVALID_ARGUMENT,
-             'message':
-                 "Invalid JSON payload received. {0: {'value': "
-                 "['Missing data for required field.']}}",
-             'type': 'fatal'}],
-            'data': {}}
+        {
+            'errors': [
+                {'code': INVALID_ARGUMENT,
+                 'message':
+                     "Invalid JSON payload received. {0: {'value': "
+                     "['Missing data for required field.']}}",
+                 'type': 'fatal'}
+            ],
+            'data': {}
+        }
     )
 
 

@@ -40,7 +40,7 @@ class InvalidArgumentError(TRFormattedError):
 class UnsupportedObservableTypeError(InvalidArgumentError):
     def __init__(self, type_):
         super().__init__(
-            f"Unsupported observable error: {type_}"
+            f'Unsupported observable error: {type_}'
         )
 
 
