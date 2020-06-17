@@ -1,10 +1,7 @@
 INVALID_ARGUMENT = 'invalid argument'
 PERMISSION_DENIED = 'permission denied'
 UNKNOWN = 'unknown'
-TOO_MANY_REQUESTS = 'too many requests'
 UNAUTHORIZED = 'unauthorized'
-NOT_FOUND = 'not found'
-UNAVAILABLE = 'unavailable'
 
 
 class TRFormattedError(Exception):
