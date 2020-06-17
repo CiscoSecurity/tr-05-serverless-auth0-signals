@@ -7,6 +7,7 @@ respond_api = Blueprint('respond', __name__)
 
 @respond_api.route('/respond/observables', methods=['POST'])
 def respond_observables():
+    # There are no actions to list.
     return jsonify_data([])
 
 
