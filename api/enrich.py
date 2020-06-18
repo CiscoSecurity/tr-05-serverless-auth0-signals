@@ -20,8 +20,7 @@ def deliberate_observables():
 
 @enrich_api.route('/observe/observables', methods=['POST'])
 def observe_observables():
-    _ = get_jwt()
-    _ = get_observables()
+    # Not implemented.
     return jsonify_data({})
 
 
