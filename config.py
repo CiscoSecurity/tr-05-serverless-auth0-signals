@@ -12,3 +12,27 @@ class Config:
 
     USER_AGENT = ('Cisco Threat Response Integrations '
                   '<tr-integrations-support@cisco.com>')
+
+    SCORE_MAPPING = {
+        0: {
+            "disposition": 5,
+            "disposition_name": "Unknown",
+        },
+        -1: {
+            "disposition": 3,
+            "disposition_name": "Suspicious",
+        },
+        -2: {
+            "disposition": 3,
+            "disposition_name": "Suspicious",
+        },
+        -3: {
+            "disposition": 2,
+            "disposition_name": "Malicious",
+        }
+    }
+
+    SUPPORTED_TYPES = {
+        'ip': 'IP',
+        'ipv6': 'IPv6',
+    }

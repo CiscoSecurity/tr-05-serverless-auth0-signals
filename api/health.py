@@ -1,28 +1,14 @@
-import requests
-from flask import Blueprint, current_app
+from flask import Blueprint
 
-from api.errors import UnexpectedResponseError
-from api.utils import jsonify_data, get_jwt, join_url
+
+from api.utils import get_jwt, jsonify_data
+from api.client import Auth0SignalsClient
 
 health_api = Blueprint('health', __name__)
 
 
 @health_api.route('/health', methods=['POST'])
 def health():
-    token = get_jwt()
-
-    url = join_url(current_app.config['API_URL'], 'ip')
-
-    headers = {
-        'Accept': 'application/json',
-        'X-Auth-Token': token.get('key'),
-        'User-Agent': current_app.config['USER_AGENT']
-
-    }
-
-    response = requests.get(url, headers=headers)
-
-    if response.ok:
-        return jsonify_data({'status': 'ok'})
-
-    raise UnexpectedResponseError(response)
+    client = Auth0SignalsClient(get_jwt().get('key'))  # ToDo
+    _ = client.check_auth0_signals_health()
+    return jsonify_data({'status': 'ok'})
