@@ -58,6 +58,57 @@ def invalid_jwt(valid_jwt):
     return '.'.join([header, payload, signature])
 
 
+@fixture(scope='function')
+def auth0_signals_response_ok():
+    return auth0_signals_api_response_mock(
+        HTTPStatus.OK, payload={
+            "fullip": {
+                "geo": {},
+                "hostname": "one.one.one.one",
+                "baddomain": {
+                    "domain": {
+                        "blacklist": [],
+                        "blacklist_mx": [],
+                        "blacklist_ns": [],
+                        "mx": [],
+                        "ns": [],
+                        "score": 0
+                    },
+                    "ip": {
+                        "address": "1.1.1.1",
+                        "blacklist": "",
+                        "score": 0
+                    },
+                    "source_ip": {
+                        "address": "1.1.1.1",
+                        "blacklist": [],
+                        "score": 0
+                    },
+                    "score": 0
+                },
+                "badip": {
+                    "score": 0,
+                    "blacklists": []
+                },
+                "history": {
+                    "score": -1,
+                    "activity": [
+                        {
+                            "ip": "1.1.1.1",
+                            "timestamp": 1537000113218,
+                            "command": "rem",
+                            "blacklists": "",
+                            "blacklist_change": "UCEPROTECT-LEVEL1"
+                        },
+                    ],
+                },
+                "score": -1,
+                "whois": {}
+            }
+        }
+    )
+
+
 def auth0_signals_api_response_mock(status_code, payload=None):
     mock_response = MagicMock()
 
@@ -65,6 +116,8 @@ def auth0_signals_api_response_mock(status_code, payload=None):
     mock_response.ok = status_code == HTTPStatus.OK
 
     payload = payload or {}
+
+    mock_response.json = lambda: payload
 
     return mock_response
 
@@ -155,6 +208,15 @@ def auth0_signals_response_unauthorized_creds(secret_key):
     )
 
 
+@fixture(scope='session')
+def auth0_signals_bad_request(secret_key):
+    return auth0_signals_api_error_mock(
+        HTTPStatus.BAD_REQUEST,
+        'Bad IP format:*@^',
+        'Bad Request'
+    )
+
+
 @fixture(scope='module')
 def invalid_jwt_expected_payload(route):
     return expected_payload(
@@ -201,3 +263,42 @@ def unauthorized_creds_expected_payload(route):
             'data': {}
         }
     )
+
+
+@fixture(scope='module')
+def success_deliberate_body():
+    return {
+        "data": {
+            "verdicts": {
+                "count": 1,
+                "docs": [
+                    {
+                        "disposition": 3,
+                        "disposition_name": "Suspicious",
+                        "observable": {
+                            "type": "ip",
+                            "value": "1.1.1.1"
+                        },
+                        "type": "verdict"
+                    }
+                ]
+            }
+        }
+    }
+
+
+@fixture(scope='module')
+def success_refer_body():
+    return {'data': []}
+
+
+@fixture(scope='module')
+def success_enrich_expected_payload(
+        route, success_deliberate_body, success_refer_body
+):
+    body = None
+    if route.endswith('/deliberate/observables'):
+        body = success_deliberate_body
+    if route.endswith('/refer/observables'):
+        body = success_refer_body
+    return expected_payload(route, body)

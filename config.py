@@ -34,5 +34,4 @@ class Config:
 
     SUPPORTED_TYPES = {
         'ip': 'IP',
-        'ipv6': 'IPv6',
     }

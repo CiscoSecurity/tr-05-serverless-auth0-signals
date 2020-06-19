@@ -11,11 +11,11 @@ NOT_CRITICAL_ERRORS = (HTTPStatus.BAD_REQUEST, HTTPStatus.NOT_FOUND)
 
 
 class Auth0SignalsClient:
-    def __init__(self, api_key):
+    def __init__(self, token):
         self.api_url = current_app.config['API_URL']
         self.headers = {
             'Accept': 'application/json',
-            'X-Auth-Token': api_key,
+            'X-Auth-Token': token.get('key'),
             'User-Agent': current_app.config['USER_AGENT']
 
         }

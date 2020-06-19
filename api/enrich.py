@@ -35,14 +35,14 @@ def extract_verdict(output, observable):
 
 @enrich_api.route('/deliberate/observables', methods=['POST'])
 def deliberate_observables():
-    client = Auth0SignalsClient(get_jwt().get('key'))
+    client = Auth0SignalsClient(get_jwt())
     observables = get_observables()
     g.verdicts = []
     for observable in observables:
         if observable['type'] in current_app.config['SUPPORTED_TYPES']:
-            lookup_data = client.get_auth0_signals_response(observable)
-            if lookup_data:
-                g.verdicts.append(extract_verdict(lookup_data, observable))
+            response_data = client.get_auth0_signals_response(observable)
+            if response_data:
+                g.verdicts.append(extract_verdict(response_data, observable))
     return jsonify_result()
 
 
