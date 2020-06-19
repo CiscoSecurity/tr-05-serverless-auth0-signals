@@ -11,4 +11,5 @@ health_api = Blueprint('health', __name__)
 def health():
     client = Auth0SignalsClient(get_jwt())
     _ = client.check_auth0_signals_health()
+
     return jsonify_data({'status': 'ok'})
