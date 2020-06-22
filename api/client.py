@@ -3,7 +3,7 @@ from http import HTTPStatus
 
 from flask import current_app
 
-from api.errors import UnexpectedResponseError
+from api.errors import CriticalError
 from api.utils import join_url
 
 
@@ -30,7 +30,7 @@ class Auth0SignalsClient:
         if response.status_code in NOT_CRITICAL_ERRORS:
             return []
 
-        raise UnexpectedResponseError(response)
+        raise CriticalError(response)
 
     def check_health(self):
         url = join_url(self.api_url, 'ip')
@@ -38,4 +38,4 @@ class Auth0SignalsClient:
         response = requests.get(url, headers=self.headers)
 
         if not response.ok:
-            raise UnexpectedResponseError(response)
+            raise CriticalError(response)
