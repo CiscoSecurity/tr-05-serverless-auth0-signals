@@ -14,7 +14,6 @@ get_observables = partial(get_json, schema=ObservableSchema(many=True))
 
 
 def extract_verdict(output, observable):
-
     valid_time = {
         'start_time': datetime.utcnow().isoformat() + 'Z'
     }
