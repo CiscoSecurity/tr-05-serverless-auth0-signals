@@ -17,10 +17,9 @@ class Auth0SignalsClient:
             'Accept': 'application/json',
             'X-Auth-Token': token.get('key'),
             'User-Agent': current_app.config['USER_AGENT']
-
         }
 
-    def get_auth0_signals_response(self, observable):
+    def get(self, observable):
         url = join_url(self.api_url, 'ip', observable['value'])
 
         response = requests.get(url, headers=self.headers)
@@ -33,7 +32,7 @@ class Auth0SignalsClient:
 
         raise UnexpectedResponseError(response)
 
-    def check_auth0_signals_health(self):
+    def check_health(self):
         url = join_url(self.api_url, 'ip')
 
         response = requests.get(url, headers=self.headers)

@@ -41,7 +41,7 @@ def deliberate_observables():
 
     for observable in observables:
         if observable['type'] in current_app.config['SUPPORTED_TYPES']:
-            response_data = client.get_auth0_signals_response(observable)
+            response_data = client.get(observable)
             if response_data:
                 g.verdicts.append(extract_verdict(response_data, observable))
 
