@@ -31,4 +31,3 @@ class Config:
             "disposition_name": "Malicious",
         }
     }
-
