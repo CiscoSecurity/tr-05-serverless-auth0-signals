@@ -39,7 +39,7 @@ def deliberate_observables():
     g.verdicts = []
 
     for observable in observables:
-        if observable['type'] in current_app.config['SUPPORTED_TYPES']:
+        if observable['type'] == 'ip':
             response_data = client.get(observable)
             if response_data:
                 g.verdicts.append(extract_verdict(response_data, observable))

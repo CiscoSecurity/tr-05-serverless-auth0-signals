@@ -32,6 +32,3 @@ class Config:
         }
     }
 
-    SUPPORTED_TYPES = {
-        'ip': 'IP',
-    }
