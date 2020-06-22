@@ -10,6 +10,6 @@ health_api = Blueprint('health', __name__)
 @health_api.route('/health', methods=['POST'])
 def health():
     client = Auth0SignalsClient(get_jwt())
-    _ = client.check_auth0_signals_health()
+    _ = client.check_health()
 
     return jsonify_data({'status': 'ok'})
