@@ -41,7 +41,7 @@ class UnsupportedObservableTypeError(InvalidArgumentError):
         )
 
 
-class UnexpectedResponseError(TRFormattedError):
+class CriticalError(TRFormattedError):
     def __init__(self, response):
         super().__init__(
             response.reason,
