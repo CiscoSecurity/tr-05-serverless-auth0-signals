@@ -24,7 +24,8 @@ def test_enrich_call_with_invalid_jwt_failure(
     response = client.post(route, headers=headers(invalid_jwt))
 
     assert response.status_code == HTTPStatus.OK
-    assert response.json == invalid_jwt_expected_payload
+    if route != '/refer/observables':
+        assert response.json == invalid_jwt_expected_payload
 
 
 @fixture(scope='module')
@@ -61,7 +62,7 @@ def test_enrich_call_success(
     response = response.get_json()
     assert response.get('errors') is None
 
-    if response.get('data') and response['data'].get('verdicts'):
+    if route == '/deliberate/observables':
         assert response['data']['verdicts']['docs'][0].pop('valid_time')
 
     assert response == success_enrich_expected_payload

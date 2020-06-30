@@ -53,8 +53,28 @@ def observe_observables():
     return jsonify_data({})
 
 
+def get_search_pivot(value):
+    return {
+        'id': f'ref-auth0-signals-search-ip-{value}',
+        'title':
+            'Search for this IP',
+        'description':
+            'Lookup this IP on Auth0 Signals',
+        'url': current_app.config['UI_URL'].format(
+            value=value
+        ),
+        'categories': ['Search', 'Auth0 Signals'],
+    }
+
+
 @enrich_api.route('/refer/observables', methods=['POST'])
 def refer_observables():
-    _ = get_jwt()
-    _ = get_observables()
-    return jsonify_data([])
+    observables = get_observables()
+    data = []
+
+    for observable in observables:
+        value = observable['value']
+        type_ = observable['type'].lower()
+        if type_ == 'ip':
+            data.append(get_search_pivot(value))
+    return jsonify_data(data)

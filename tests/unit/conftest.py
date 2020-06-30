@@ -289,7 +289,21 @@ def success_deliberate_body():
 
 @fixture(scope='module')
 def success_refer_body():
-    return {'data': []}
+    return {
+        "data":
+            [
+                {
+                    "categories": [
+                        "Search",
+                        "Auth0 Signals"
+                    ],
+                    "description": "Lookup this IP on Auth0 Signals",
+                    "id": "ref-auth0-signals-search-ip-1.1.1.1",
+                    "title": "Search for this IP",
+                    "url": "https://auth0.com/signals/ip/1.1.1.1-report"
+                }
+            ]
+    }
 
 
 @fixture(scope='module')
