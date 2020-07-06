@@ -266,8 +266,8 @@ header set to `Bearer <JWT>`.
 
 Each response from the Auth0 Signals API for the supported observables generates the following CTIM entities:
 - `Verdict` based on the value of `.fullip.score`:
-  - 0: `unkown`
-  - -1: `suspicious`
-  - -2: `suspicious`
-  - -3: `malicious`
+  - 0: `Unkown`
+  - -1: `Suspicious`
+  - -2: `Suspicious`
+  - -3: `Malicious`
   
