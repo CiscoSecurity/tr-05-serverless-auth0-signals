@@ -263,6 +263,7 @@ header set to `Bearer <JWT>`.
 ```
 
 ### CTIM Mapping Specifics
+
 Each response from the Auth0 Signals API for the supported observables generates the following CTIM entities:
 - `Verdict` based on the value of `.fullip.score`:
   - 0: `unkown`
