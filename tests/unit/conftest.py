@@ -135,9 +135,6 @@ def auth0_signals_api_error_mock(status_code, text=None, reason=None):
 
 
 def expected_payload(r, body):
-    if r.endswith('/observe/observables'):
-        return {'data': {}}
-
     return body
 
 
@@ -307,6 +304,28 @@ def success_refer_body():
 
 
 @fixture(scope='module')
+def success_deliberate_body():
+    return {
+        "data": {
+            "verdicts": {
+                "count": 1,
+                "docs": [
+                    {
+                        "disposition": 3,
+                        "disposition_name": "Suspicious",
+                        "observable": {
+                            "type": "ip",
+                            "value": "1.1.1.1"
+                        },
+                        "type": "verdict"
+                    }
+                ]
+            }
+        }
+    }
+
+
+@fixture(scope='module')
 def success_enrich_expected_payload(
         route, success_deliberate_body, success_refer_body
 ):
@@ -315,4 +334,6 @@ def success_enrich_expected_payload(
         body = success_deliberate_body
     if route.endswith('/refer/observables'):
         body = success_refer_body
-    return expected_payload(route, body)
+    if route.endswith('/observe/observables'):
+        body = success_deliberate_body
+    return body
