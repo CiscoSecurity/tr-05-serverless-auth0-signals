@@ -20,10 +20,6 @@ def time_to_ctr_format(time):
 
 
 def extract_verdict(output, observable):
-    valid_time = {
-        'start_time': time_to_ctr_format(datetime.utcnow())
-    }
-
     score = int(output['fullip']['score'])
     doc = {
         'observable': observable,
@@ -31,7 +27,7 @@ def extract_verdict(output, observable):
             current_app.config['SCORE_MAPPING'][score]['disposition'],
         'disposition_name':
             current_app.config['SCORE_MAPPING'][score]['disposition_name'],
-        'valid_time': valid_time,
+        'valid_time': {},
         'type': 'verdict'
     }
 

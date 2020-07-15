@@ -263,7 +263,8 @@ def success_deliberate_body():
                             "type": "ip",
                             "value": "1.1.1.1"
                         },
-                        "type": "verdict"
+                        "type": "verdict",
+                        "valid_time": {}
                     }
                 ]
             }
@@ -304,7 +305,8 @@ def success_observe_body():
                             "type": "ip",
                             "value": "1.1.1.1"
                         },
-                        "type": "verdict"
+                        "type": "verdict",
+                        "valid_time": {}
                     }
                 ]
             },

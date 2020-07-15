@@ -62,11 +62,9 @@ def test_enrich_call_success(
     response = response.get_json()
     assert response.get('errors') is None
 
-    if route != '/refer/observables':
-        assert response['data']['verdicts']['docs'][0].pop('valid_time')
-        if route == '/observe/observables':
-            assert response['data']['judgements']['docs'][0].pop('valid_time')
-            assert response['data']['judgements']['docs'][0].pop('id')
+    if route == '/observe/observables':
+        assert response['data']['judgements']['docs'][0].pop('valid_time')
+        assert response['data']['judgements']['docs'][0].pop('id')
 
     assert response == success_enrich_expected_payload
 
@@ -98,7 +96,6 @@ def test_enrich_call_success_with_extended_error_handling(
 
         response = response.get_json()
 
-        assert response['data']['verdicts']['docs'][0].pop('valid_time')
         if route == '/observe/observables':
             assert response['data']['judgements']['docs'][0].pop('valid_time')
             assert response['data']['judgements']['docs'][0].pop('id')
