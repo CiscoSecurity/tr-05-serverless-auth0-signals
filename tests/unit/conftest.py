@@ -241,8 +241,8 @@ def unauthorized_creds_expected_payload(route):
     return {
             'errors': [
                 {'code': UNAUTHORIZED,
-                 'message': ("Unexpected response from Auth0 Signals: "
-                             "Unauthorized. API Key not found."),
+                 'message': ('Unexpected response from Auth0 Signals: '
+                             'Unauthorized. API Key not found.'),
                  'type': 'fatal'}
             ],
             'data': {}
