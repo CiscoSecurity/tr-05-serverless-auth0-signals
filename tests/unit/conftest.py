@@ -331,6 +331,28 @@ def success_observe_body():
                         "type": "judgement"
                     }
                 ]
+            },
+            "judgements": {
+                "count": 1,
+                "docs": [
+                    {
+                        "confidence": "High",
+                        "disposition": 3,
+                        "disposition_name": "Suspicious",
+                        "observable": {
+                            "type": "ip",
+                            "value": "1.1.1.1"
+                        },
+                        "priority": 90,
+                        "reason": "IP found on blocklist in recent past",
+                        "schema_version": "1.0.17",
+                        "severity": "Medium",
+                        "source": "Auth0 Signals Report",
+                        "source_uri": "https://auth0.com/signals/"
+                                      "ip/1.1.1.1-report",
+                        "type": "judgement"
+                    }
+                ]
             }
         }
     }
