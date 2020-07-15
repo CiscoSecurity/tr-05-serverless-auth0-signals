@@ -34,9 +34,9 @@ class Config:
     }
 
     REASON_MAPPING = {
-        "baddomain": "Associated hostname found on blocklist",
-        "badip": "IP found on blocklist",
-        "history": "IP found on blocklist in recent past"
+        'baddomain': 'Associated hostname found on blocklist',
+        'badip': 'IP found on blocklist',
+        'history': 'IP found on blocklist in recent past'
     }
 
     CTIM_SCHEMA_VERSION = '1.0.17'
