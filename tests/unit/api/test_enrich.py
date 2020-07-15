@@ -62,7 +62,7 @@ def test_enrich_call_success(
     response = response.get_json()
     assert response.get('errors') is None
 
-    if route == '/deliberate/observables':
+    if route != '/refer/observables':
         assert response['data']['verdicts']['docs'][0].pop('valid_time')
 
     assert response == success_enrich_expected_payload
@@ -82,7 +82,7 @@ def test_enrich_call_success_with_extended_error_handling(
         auth0_signals_response_unauthorized_creds,
         auth0_signals_bad_request, unauthorized_creds_expected_payload
 ):
-    if route == '/deliberate/observables':
+    if route != '/refer/observables':
         get_mock.side_effect = [
             auth0_signals_response_ok,
             auth0_signals_bad_request,

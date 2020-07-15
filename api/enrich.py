@@ -49,8 +49,17 @@ def deliberate_observables():
 
 @enrich_api.route('/observe/observables', methods=['POST'])
 def observe_observables():
-    # Not implemented.
-    return jsonify_data({})
+    client = Auth0SignalsClient(get_jwt())
+    observables = get_observables()
+    g.verdicts = []
+
+    for observable in observables:
+        if observable['type'] == 'ip':
+            response_data = client.get(observable)
+            if response_data:
+                g.verdicts.append(extract_verdict(response_data, observable))
+
+    return jsonify_result()
 
 
 def get_search_pivot(value):

@@ -134,13 +134,6 @@ def auth0_signals_api_error_mock(status_code, text=None, reason=None):
     return mock_response
 
 
-def expected_payload(r, body):
-    if r.endswith('/observe/observables'):
-        return {'data': {}}
-
-    return body
-
-
 @fixture(scope='function')
 def auth0_signals_health_check():
     return auth0_signals_api_response_mock(
@@ -219,9 +212,7 @@ def auth0_signals_bad_request(secret_key):
 
 @fixture(scope='module')
 def invalid_jwt_expected_payload(route):
-    return expected_payload(
-        route,
-        {
+    return {
             'errors': [
                 {'code': PERMISSION_DENIED,
                  'message': 'Invalid Authorization Bearer JWT.',
@@ -229,14 +220,11 @@ def invalid_jwt_expected_payload(route):
             ],
             'data': {}
         }
-    )
 
 
 @fixture(scope='module')
 def invalid_json_expected_payload(route):
-    return expected_payload(
-        route,
-        {
+    return {
             'errors': [
                 {'code': INVALID_ARGUMENT,
                  'message':
@@ -246,23 +234,19 @@ def invalid_json_expected_payload(route):
             ],
             'data': {}
         }
-    )
 
 
 @fixture(scope='module')
 def unauthorized_creds_expected_payload(route):
-    return expected_payload(
-        route,
-        {
+    return {
             'errors': [
                 {'code': UNAUTHORIZED,
-                 'message': ("Unexpected response from Auth0 Signals: "
-                             "Unauthorized. API Key not found."),
+                 'message': ('Unexpected response from Auth0 Signals: '
+                             'Unauthorized. API Key not found.'),
                  'type': 'fatal'}
             ],
             'data': {}
         }
-    )
 
 
 @fixture(scope='module')
@@ -307,12 +291,35 @@ def success_refer_body():
 
 
 @fixture(scope='module')
+def success_observe_body():
+    return {
+        "data": {
+            "verdicts": {
+                "count": 1,
+                "docs": [
+                    {
+                        "disposition": 3,
+                        "disposition_name": "Suspicious",
+                        "observable": {
+                            "type": "ip",
+                            "value": "1.1.1.1"
+                        },
+                        "type": "verdict"
+                    }
+                ]
+            }
+        }
+    }
+
+
+@fixture(scope='module')
 def success_enrich_expected_payload(
-        route, success_deliberate_body, success_refer_body
+        route, success_deliberate_body,
+        success_refer_body, success_observe_body
 ):
-    body = None
-    if route.endswith('/deliberate/observables'):
-        body = success_deliberate_body
-    if route.endswith('/refer/observables'):
-        body = success_refer_body
-    return expected_payload(route, body)
+    payload_to_route_match = {
+        '/deliberate/observables': success_deliberate_body,
+        '/refer/observables': success_refer_body,
+        '/observe/observables': success_observe_body
+    }
+    return payload_to_route_match[route]
