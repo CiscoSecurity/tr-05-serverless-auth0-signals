@@ -317,11 +317,9 @@ def success_enrich_expected_payload(
         route, success_deliberate_body,
         success_refer_body, success_observe_body
 ):
-    body = None
-    if route.endswith('/deliberate/observables'):
-        body = success_deliberate_body
-    if route.endswith('/refer/observables'):
-        body = success_refer_body
-    if route.endswith('/observe/observables'):
-        body = success_observe_body
-    return body
+    payload_to_route_match = {
+        '/deliberate/observables': success_deliberate_body,
+        '/refer/observables': success_refer_body,
+        '/observe/observables': success_observe_body
+    }
+    return payload_to_route_match[route]
