@@ -63,7 +63,7 @@ def extract_judgements(output, observable):
             'source_uri': current_app.config['UI_URL'].format(
                 value=observable['value']
             ),
-            'id': f'transient:{uuid4()}',
+            'id': f'transient:judgement-{uuid4()}',
             'valid_time': {
                 'start_time': time_to_ctr_format(start_time),
                 'end_time': time_to_ctr_format(end_time),
