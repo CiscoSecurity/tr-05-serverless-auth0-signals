@@ -64,6 +64,9 @@ def test_enrich_call_success(
 
     if route != '/refer/observables':
         assert response['data']['verdicts']['docs'][0].pop('valid_time')
+        if route == '/observe/observables':
+            assert response['data']['judgements']['docs'][0].pop('valid_time')
+            assert response['data']['judgements']['docs'][0].pop('id')
 
     assert response == success_enrich_expected_payload
 
@@ -96,6 +99,9 @@ def test_enrich_call_success_with_extended_error_handling(
         response = response.get_json()
 
         assert response['data']['verdicts']['docs'][0].pop('valid_time')
+        if route == '/observe/observables':
+            assert response['data']['judgements']['docs'][0].pop('valid_time')
+            assert response['data']['judgements']['docs'][0].pop('id')
 
         expected_result = {}
         expected_result.update(unauthorized_creds_expected_payload)
