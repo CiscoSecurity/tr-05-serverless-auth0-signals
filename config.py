@@ -32,3 +32,22 @@ class Config:
             "disposition_name": "Malicious",
         }
     }
+
+    REASON_MAPPING = {
+        'baddomain': 'Associated hostname found on blocklist',
+        'badip': 'IP found on blocklist',
+        'history': 'IP found on blocklist in recent past'
+    }
+
+    CTIM_SCHEMA_VERSION = '1.0.17'
+
+    CTIM_JUDGEMENT_DEFAULTS = {
+        'type': 'judgement',
+        'disposition': 3,
+        'disposition_name': 'Suspicious',
+        'schema_version': CTIM_SCHEMA_VERSION,
+        'source': 'Auth0 Signals Report',
+        'confidence': 'High',
+        'severity': 'Medium',
+        'priority': 90,
+    }
