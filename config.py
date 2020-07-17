@@ -9,6 +9,7 @@ class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY', '')
 
     API_URL = 'https://signals.api.auth0.com/v2.0/'
+    METADATA_URL = 'https://signals.api.auth0.com/metadata/{blocklist_type}/lists/{blocklist_id}'
     UI_URL = 'https://auth0.com/signals/ip/{value}-report'
 
     USER_AGENT = ('Cisco Threat Response Integrations '
@@ -51,3 +52,15 @@ class Config:
         'severity': 'Medium',
         'priority': 90,
     }
+
+    CTIM_SIGHTING_DEFAULTS = {
+        'type': 'sighting',
+        'count': 1,
+        'confidence': 'High',
+        'schema_version': CTIM_SCHEMA_VERSION,
+        'description': 'Found on blocklist'
+    }
+
+
+    CTIM_SCHEMA_VERSION = '1.0.17'
+
