@@ -39,3 +39,23 @@ class Auth0SignalsClient:
 
         if not response.ok:
             raise CriticalError(response)
+
+    def get_the_full_details_of_the_list(self, response_data):
+        result = []  # ToDo Add Limit, Refactor
+        blocklists_badip = response_data['fullip']['badip']['blacklists']
+        blocklists_baddomain = []
+        for i in [response_data['fullip']['baddomain']['domain'].get('blacklist'),
+                  response_data['fullip']['baddomain']['domain'].get('blacklist_mx'),
+                  response_data['fullip']['baddomain']['domain'].get('blacklist_ns')]:
+            if i:
+                blocklists_baddomain.extend(i)
+        for list_id in blocklists_badip:
+            response = requests.get(current_app.config['METADATA_URL'].format(blocklist_type='badip', blocklist_id=list_id),
+                                    headers=self.headers)
+            result.append(response.json())
+        for list_id in blocklists_baddomain:
+            response = requests.get(current_app.config['METADATA_URL'].format(blocklist_type='baddomain', blocklist_id=list_id),
+                                    headers=self.headers)
+            result.append(response.json())
+
+        return result
