@@ -63,8 +63,28 @@ def auth0_signals_response_ok():
     return auth0_signals_api_response_mock(
         HTTPStatus.OK, payload={
             "fullip": {
-                "geo": {},
-                "hostname": "one.one.one.one",
+                "geo": {
+                    "address": "79.143.44.122",
+                    "hostname": "79.143.44.122.vntp.net",
+                    "country": "UA",
+                    "country_names": {
+                        "de": "Ukraine",
+                        "en": "Ukraine"
+                    },
+                    "country_geoname_id": 690791,
+                    "continent": "EU",
+                    "continent_names": {
+                        "de": "Europa",
+                        "en": "Europe"
+                    },
+                    "region_geoname_id": 689559,
+                    "city": "Vinnytsia",
+                    "city_names": {
+                        "de": "Winnyzja",
+                        "en": "Vinnytsia"
+                    }
+                },
+                "hostname": "79.143.44.122.vntp.net",
                 "baddomain": {
                     "domain": {
                         "blacklist": [],
@@ -75,36 +95,64 @@ def auth0_signals_response_ok():
                         "score": 0
                     },
                     "ip": {
-                        "address": "1.1.1.1",
+                        "address": "",
                         "blacklist": "",
                         "score": 0
                     },
                     "source_ip": {
-                        "address": "1.1.1.1",
+                        "address": "188.163.44.200",
                         "blacklist": [],
                         "score": 0
                     },
                     "score": 0
                 },
                 "badip": {
-                    "score": 0,
-                    "blacklists": []
+                    "score": -1,
+                    "blacklists": [
+                        "FAIL2BAN-SSH"
+                    ]
                 },
                 "history": {
                     "score": -1,
                     "activity": [
                         {
-                            "ip": "1.1.1.1",
-                            "timestamp": 1537000113218,
-                            "command": "rem",
-                            "blacklists": "",
-                            "blacklist_change": "UCEPROTECT-LEVEL1"
+                            "ip": "79.143.44.122",
+                            "timestamp": 1594894842846,
+                            "command": "add",
+                            "blacklists": "FAIL2BAN-SSH,STOPFORUMSPAM-365",
+                            "blacklist_change": "FAIL2BAN-SSH"
                         },
+                        {
+                            "ip": "79.143.44.122",
+                            "timestamp": 1594891098116,
+                            "command": "rem",
+                            "blacklists": "STOPFORUMSPAM-365",
+                            "blacklist_change": "FAIL2BAN-SSH"
+                        }
                     ],
                 },
-                "score": -1,
-                "whois": {}
+                "score": -2,
             }
+        }
+    )
+
+
+@fixture(scope='function')
+def auth0_signals_response_details():
+    return auth0_signals_api_response_mock(
+        HTTPStatus.OK, payload={
+            "name": "FAIL2BAN-SSH Blocklist.de",
+            "refresh": "60  minutes",
+            "source": "Fail2Ban and Blocklist.de services",
+            "type": "badip",
+            "enabled": "True",
+            "tags": "reputation,abuse,bruteforce",
+            "group": "abuse",
+            "count": "16407",
+            "sensitivity": "1",
+            "last_update": "1594984501",
+            "site": "http://www.blocklist.de",
+            "visibility": "Public"
         }
     )
 
@@ -213,40 +261,40 @@ def auth0_signals_bad_request(secret_key):
 @fixture(scope='module')
 def invalid_jwt_expected_payload(route):
     return {
-            'errors': [
-                {'code': PERMISSION_DENIED,
-                 'message': 'Invalid Authorization Bearer JWT.',
-                 'type': 'fatal'}
-            ],
-            'data': {}
-        }
+        'errors': [
+            {'code': PERMISSION_DENIED,
+             'message': 'Invalid Authorization Bearer JWT.',
+             'type': 'fatal'}
+        ],
+        'data': {}
+    }
 
 
 @fixture(scope='module')
 def invalid_json_expected_payload(route):
     return {
-            'errors': [
-                {'code': INVALID_ARGUMENT,
-                 'message':
-                     "Invalid JSON payload received. {0: {'value': "
-                     "['Missing data for required field.']}}",
-                 'type': 'fatal'}
-            ],
-            'data': {}
-        }
+        'errors': [
+            {'code': INVALID_ARGUMENT,
+             'message':
+                 "Invalid JSON payload received. {0: {'value': "
+                 "['Missing data for required field.']}}",
+             'type': 'fatal'}
+        ],
+        'data': {}
+    }
 
 
 @fixture(scope='module')
 def unauthorized_creds_expected_payload(route):
     return {
-            'errors': [
-                {'code': UNAUTHORIZED,
-                 'message': ('Unexpected response from Auth0 Signals: '
-                             'Unauthorized. API Key not found.'),
-                 'type': 'fatal'}
-            ],
-            'data': {}
-        }
+        'errors': [
+            {'code': UNAUTHORIZED,
+             'message': ('Unexpected response from Auth0 Signals: '
+                         'Unauthorized. API Key not found.'),
+             'type': 'fatal'}
+        ],
+        'data': {}
+    }
 
 
 @fixture(scope='module')
@@ -295,24 +343,26 @@ def success_refer_body():
 def success_observe_body():
     return {
         "data": {
-            "verdicts": {
-                "count": 1,
+            "judgements": {
+                "count": 2,
                 "docs": [
                     {
+                        "confidence": "High",
                         "disposition": 3,
                         "disposition_name": "Suspicious",
                         "observable": {
                             "type": "ip",
                             "value": "1.1.1.1"
                         },
-                        "type": "verdict",
-                        "valid_time": {}
-                    }
-                ]
-            },
-            "judgements": {
-                "count": 1,
-                "docs": [
+                        "priority": 90,
+                        "reason": "IP found on blocklist",
+                        "schema_version": "1.0.17",
+                        "severity": "Medium",
+                        "source": "Auth0 Signals Report",
+                        "source_uri": "https://auth0.com/signals/ip/"
+                                      "1.1.1.1-report",
+                        "type": "judgement"
+                    },
                     {
                         "confidence": "High",
                         "disposition": 3,
@@ -326,9 +376,40 @@ def success_observe_body():
                         "schema_version": "1.0.17",
                         "severity": "Medium",
                         "source": "Auth0 Signals Report",
-                        "source_uri": "https://auth0.com/signals/"
-                                      "ip/1.1.1.1-report",
-                        "type": "judgement"
+                        "source_uri": "https://auth0.com/signals/ip/"
+                                      "1.1.1.1-report",
+                        "type": "judgement",
+                    }
+                ]
+            },
+            "sightings": {
+                "count": 1,
+                "docs": [
+                    {
+                        "confidence": "High",
+                        "count": 1,
+                        "description": "Found on blocklist",
+                        "schema_version": "1.0.17",
+                        "source": "Fail2Ban and Blocklist.de services",
+                        "source_uri": "http://www.blocklist.de",
+                        "type": "sighting",
+                        "tlp": "white",
+                        "severity": "High"
+                    }
+                ]
+            },
+            "verdicts": {
+                "count": 1,
+                "docs": [
+                    {
+                        "disposition": 3,
+                        "disposition_name": "Suspicious",
+                        "observable": {
+                            "type": "ip",
+                            "value": "1.1.1.1"
+                        },
+                        "type": "verdict",
+                        "valid_time": {}
                     }
                 ]
             }

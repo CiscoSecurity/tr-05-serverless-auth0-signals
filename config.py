@@ -8,7 +8,7 @@ class Config:
 
     SECRET_KEY = os.environ.get('SECRET_KEY', '')
 
-    API_URL = 'https://signals.api.auth0.com/v2.0/'
+    API_URL = 'https://signals.api.auth0.com/'
     UI_URL = 'https://auth0.com/signals/ip/{value}-report'
 
     USER_AGENT = ('Cisco Threat Response Integrations '
@@ -51,3 +51,21 @@ class Config:
         'severity': 'Medium',
         'priority': 90,
     }
+
+    SEVERITY_MAPPING = {'1': 'High', '5': 'Medium', '10': 'Info'}
+
+    CTIM_SIGHTING_DEFAULTS = {
+        'type': 'sighting',
+        'count': 1,
+        'confidence': 'High',
+        'schema_version': CTIM_SCHEMA_VERSION,
+        'description': 'Found on blocklist'
+    }
+
+    CTR_DEFAULT_ENTITIES_LIMIT = 100
+
+    try:
+        CTR_ENTITIES_LIMIT = int(os.environ['CTR_ENTITIES_LIMIT'])
+        assert CTR_ENTITIES_LIMIT > 0
+    except (KeyError, ValueError, AssertionError):
+        CTR_ENTITIES_LIMIT = CTR_DEFAULT_ENTITIES_LIMIT

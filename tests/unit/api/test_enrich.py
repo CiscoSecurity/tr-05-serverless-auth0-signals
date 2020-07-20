@@ -52,11 +52,14 @@ def valid_json():
 
 @patch('requests.get')
 def test_enrich_call_success(
-        get_mock, route, client, valid_jwt,
-        valid_json, auth0_signals_response_ok,
+        get_mock, route, client, valid_jwt, valid_json,
+        auth0_signals_response_ok, auth0_signals_response_details,
         success_enrich_expected_payload
 ):
-    get_mock.return_value = auth0_signals_response_ok
+    get_mock.side_effect = [
+        auth0_signals_response_ok,
+        auth0_signals_response_details
+    ]
     response = client.post(route, headers=headers(valid_jwt), json=valid_json)
     assert response.status_code == HTTPStatus.OK
     response = response.get_json()
@@ -65,6 +68,10 @@ def test_enrich_call_success(
     if route == '/observe/observables':
         assert response['data']['judgements']['docs'][0].pop('valid_time')
         assert response['data']['judgements']['docs'][0].pop('id')
+        assert response['data']['judgements']['docs'][1].pop('valid_time')
+        assert response['data']['judgements']['docs'][1].pop('id')
+        assert response['data']['sightings']['docs'][0].pop('observed_time')
+        assert response['data']['sightings']['docs'][0].pop('id')
 
     assert response == success_enrich_expected_payload
 
@@ -79,16 +86,22 @@ def valid_json_multiple():
 @patch('requests.get')
 def test_enrich_call_success_with_extended_error_handling(
         get_mock, route, client, valid_jwt, valid_json_multiple,
-        auth0_signals_response_ok, success_enrich_expected_payload,
+        auth0_signals_response_ok, auth0_signals_response_details,
+        success_enrich_expected_payload,
         auth0_signals_response_unauthorized_creds,
         auth0_signals_bad_request, unauthorized_creds_expected_payload
 ):
     if route != '/refer/observables':
-        get_mock.side_effect = [
+        mock_responses = [
             auth0_signals_response_ok,
             auth0_signals_bad_request,
             auth0_signals_response_unauthorized_creds
         ]
+
+        if route == '/observe/observables':
+            mock_responses.insert(1, auth0_signals_response_details)
+
+        get_mock.side_effect = mock_responses
         response = client.post(
             route, headers=headers(valid_jwt), json=valid_json_multiple
         )
@@ -99,6 +112,12 @@ def test_enrich_call_success_with_extended_error_handling(
         if route == '/observe/observables':
             assert response['data']['judgements']['docs'][0].pop('valid_time')
             assert response['data']['judgements']['docs'][0].pop('id')
+            assert response['data']['judgements']['docs'][1].pop('valid_time')
+            assert response['data']['judgements']['docs'][1].pop('id')
+            assert response['data']['sightings']['docs'][0].pop(
+                'observed_time'
+            )
+            assert response['data']['sightings']['docs'][0].pop('id')
 
         expected_result = {}
         expected_result.update(unauthorized_creds_expected_payload)

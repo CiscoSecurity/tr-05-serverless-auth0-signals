@@ -73,12 +73,40 @@ def extract_judgements(output, observable):
     return docs
 
 
+def get_tlp(blocklist):
+    if blocklist['visibility'] == 'Public':
+        return 'white'
+    return 'amber'
+
+
+def extract_sightings(details):
+    start_time = time_to_ctr_format(datetime.utcnow())
+    docs = [
+        {
+            'source': blocklist['source'],
+            'source_uri': blocklist['site'],
+            'observed_time': {
+                'start_time': start_time,
+                'end_time': start_time,
+            },
+            'id': f'transient:sighting-{uuid4()}',
+            'tlp': get_tlp(blocklist),
+            'severity': current_app.config['SEVERITY_MAPPING']
+            [blocklist['sensitivity']],
+            **current_app.config['CTIM_SIGHTING_DEFAULTS']
+        }
+        for blocklist in details
+    ]
+    return docs
+
+
 @enrich_api.route('/observe/observables', methods=['POST'])
 def observe_observables():
     client = Auth0SignalsClient(get_jwt())
     observables = get_observables()
     g.verdicts = []
     g.judgements = []
+    g.sightings = []
 
     for observable in observables:
         if observable['type'] == 'ip':
@@ -88,6 +116,8 @@ def observe_observables():
                 g.judgements.extend(
                     extract_judgements(response_data, observable)
                 )
+                details = client.get_full_details(response_data)
+                g.sightings.extend(extract_sightings(details))
 
     return jsonify_result()
 
