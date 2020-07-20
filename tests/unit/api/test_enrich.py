@@ -92,19 +92,16 @@ def test_enrich_call_success_with_extended_error_handling(
         auth0_signals_bad_request, unauthorized_creds_expected_payload
 ):
     if route != '/refer/observables':
+        side_effect = [
+            auth0_signals_response_ok,
+            auth0_signals_bad_request,
+            auth0_signals_response_unauthorized_creds
+        ]
+
         if route == '/observe/observables':
-            get_mock.side_effect = [
-                auth0_signals_response_ok,
-                auth0_signals_response_details,
-                auth0_signals_bad_request,
-                auth0_signals_response_unauthorized_creds
-            ]
-        else:
-            get_mock.side_effect = [
-                auth0_signals_response_ok,
-                auth0_signals_bad_request,
-                auth0_signals_response_unauthorized_creds
-            ]
+            side_effect.insert(1, auth0_signals_response_details)
+
+        get_mock.side_effect = side_effect
         response = client.post(
             route, headers=headers(valid_jwt), json=valid_json_multiple
         )
@@ -117,7 +114,9 @@ def test_enrich_call_success_with_extended_error_handling(
             assert response['data']['judgements']['docs'][0].pop('id')
             assert response['data']['judgements']['docs'][1].pop('valid_time')
             assert response['data']['judgements']['docs'][1].pop('id')
-            assert response['data']['sightings']['docs'][0].pop('observed_time')
+            assert response['data']['sightings']['docs'][0].pop(
+                'observed_time'
+            )
             assert response['data']['sightings']['docs'][0].pop('id')
 
         expected_result = {}

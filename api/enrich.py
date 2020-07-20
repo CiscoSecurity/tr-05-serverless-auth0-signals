@@ -73,6 +73,17 @@ def extract_judgements(output, observable):
     return docs
 
 
+def get_severity(blocklist):
+    severity_mapping = {'1': 'High', '5': 'Medium', '10': 'Info'}
+    return severity_mapping[blocklist['sensitivity']]
+
+
+def get_tlp(blocklist):
+    if blocklist['visibility'] == 'Public':
+        return 'white'
+    return 'amber'
+
+
 def extract_sightings(details):
     start_time = time_to_ctr_format(datetime.utcnow())
     docs = [
@@ -84,6 +95,8 @@ def extract_sightings(details):
                 'end_time': start_time,
             },
             'id': f'transient:sighting-{uuid4()}',
+            'tlp': get_tlp(blocklist),
+            'severity': get_severity(blocklist),
             **current_app.config['CTIM_SIGHTING_DEFAULTS']
         }
         for blocklist in details
@@ -107,7 +120,7 @@ def observe_observables():
                 g.judgements.extend(
                     extract_judgements(response_data, observable)
                 )
-                details = client.get_the_full_details_of_the_list(response_data)
+                details = client.get_full_details(response_data)
                 g.sightings.extend(extract_sightings(details))
 
     return jsonify_result()
