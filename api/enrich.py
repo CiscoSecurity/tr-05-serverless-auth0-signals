@@ -100,6 +100,23 @@ def extract_sightings(details):
     return docs
 
 
+def extract_indicators(details):
+    docs = [
+        {
+            'producer': blocklist['source'],
+            'title': blocklist['name'],
+            'valid_time': {},
+            'id': f'transient:indicator-{uuid4()}',
+            'short_description': f'Feed: {blocklist["name"]}',
+            'description': blocklist['description'],
+            'tags': blocklist['tags'].split(','),
+            **current_app.config['CTIM_INDICATOR_DEFAULTS']
+        }
+        for blocklist in details
+    ]
+    return docs
+
+
 @enrich_api.route('/observe/observables', methods=['POST'])
 def observe_observables():
     client = Auth0SignalsClient(get_jwt())
@@ -107,6 +124,7 @@ def observe_observables():
     g.verdicts = []
     g.judgements = []
     g.sightings = []
+    g.indicators = []
 
     for observable in observables:
         if observable['type'] == 'ip':
@@ -118,6 +136,7 @@ def observe_observables():
                 )
                 details = client.get_full_details(response_data)
                 g.sightings.extend(extract_sightings(details))
+                g.indicators.extend(extract_indicators(details))
 
     return jsonify_result()
 

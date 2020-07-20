@@ -152,7 +152,11 @@ def auth0_signals_response_details():
             "sensitivity": "1",
             "last_update": "1594984501",
             "site": "http://www.blocklist.de",
-            "visibility": "Public"
+            "visibility": "Public",
+            "description": "www.blocklist.de is a free and voluntary "
+                           "service provided by a Fraud/Abuse-specialist, "
+                           "whose servers are often attacked on SSH-, "
+                           "Mail-Login-, FTP-, Webserver- and other services."
         }
     )
 
@@ -395,6 +399,30 @@ def success_observe_body():
                         "type": "sighting",
                         "tlp": "white",
                         "severity": "High"
+                    }
+                ]
+            },
+            "indicators": {
+                "count": 1,
+                "docs": [
+                    {
+                        "description": "www.blocklist.de is a free and "
+                                       "voluntary service provided by "
+                                       "a Fraud/Abuse-specialist, whose "
+                                       "servers are often attacked on SSH-, "
+                                       "Mail-Login-, FTP-, Webserver- "
+                                       "and other services.",
+                        "producer": "Fail2Ban and Blocklist.de services",
+                        "schema_version": "1.0.17",
+                        "short_description": "Feed: FAIL2BAN-SSH Blocklist.de",
+                        "tags": [
+                            "reputation",
+                            "abuse",
+                            "bruteforce"
+                        ],
+                        "title": "FAIL2BAN-SSH Blocklist.de",
+                        "type": "indicator",
+                        "valid_time": {}
                     }
                 ]
             },

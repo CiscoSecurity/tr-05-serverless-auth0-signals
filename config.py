@@ -62,6 +62,11 @@ class Config:
         'description': 'Found on blocklist'
     }
 
+    CTIM_INDICATOR_DEFAULTS = {
+        'type': 'indicator',
+        'schema_version': CTIM_SCHEMA_VERSION
+    }
+
     CTR_DEFAULT_ENTITIES_LIMIT = 100
 
     try:
