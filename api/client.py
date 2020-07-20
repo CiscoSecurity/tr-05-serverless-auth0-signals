@@ -50,25 +50,28 @@ class Auth0SignalsClient:
 
     def get_full_details(self, response_data):
         result = []
-        blocklists_badip = response_data['fullip']['badip']['blacklists']
-        blocklists_baddomain = [
-            *response_data['fullip']['baddomain']['domain'].get(
-                'blacklist', []
-            ),
-            *response_data['fullip']['baddomain']['domain'].get(
-                'blacklist_mx', []
-            ),
-            *response_data['fullip']['baddomain']['domain'].get(
-                'blacklist_ns', []
-            )
-        ]
+        blocklists = {
+            'badip': response_data['fullip']['badip']['blacklists'],
+            'baddomain':
+                [
+                    *response_data['fullip']['baddomain']['domain'].get(
+                        'blacklist', []
+                    ),
+                    *response_data['fullip']['baddomain']['domain'].get(
+                        'blacklist_mx', []
+                    ),
+                    *response_data['fullip']['baddomain']['domain'].get(
+                        'blacklist_ns', []
+                    )
+                ]
+        }
 
-        for list_id in blocklists_badip:
-            if len(result) == self.limit:
-                break
-            result.append(self.get_details_of_the_list('badip', list_id))
-        for list_id in blocklists_baddomain:
-            if len(result) == self.limit:
-                break
-            result.append(self.get_details_of_the_list('baddomain', list_id))
+        for blocklist_type, blocklist_ids in blocklists.items():
+            for list_id in blocklist_ids:
+                result.append(
+                    self.get_details_of_the_list(blocklist_type, list_id)
+                )
+                if len(result) == self.limit:
+                    return result
+
         return result
