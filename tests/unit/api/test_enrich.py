@@ -92,16 +92,16 @@ def test_enrich_call_success_with_extended_error_handling(
         auth0_signals_bad_request, unauthorized_creds_expected_payload
 ):
     if route != '/refer/observables':
-        side_effect = [
+        mock_responses = [
             auth0_signals_response_ok,
             auth0_signals_bad_request,
             auth0_signals_response_unauthorized_creds
         ]
 
         if route == '/observe/observables':
-            side_effect.insert(1, auth0_signals_response_details)
+            mock_responses.insert(1, auth0_signals_response_details)
 
-        get_mock.side_effect = side_effect
+        get_mock.side_effect = mock_responses
         response = client.post(
             route, headers=headers(valid_jwt), json=valid_json_multiple
         )

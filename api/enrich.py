@@ -73,11 +73,6 @@ def extract_judgements(output, observable):
     return docs
 
 
-def get_severity(blocklist):
-    severity_mapping = {'1': 'High', '5': 'Medium', '10': 'Info'}
-    return severity_mapping[blocklist['sensitivity']]
-
-
 def get_tlp(blocklist):
     if blocklist['visibility'] == 'Public':
         return 'white'
@@ -96,7 +91,8 @@ def extract_sightings(details):
             },
             'id': f'transient:sighting-{uuid4()}',
             'tlp': get_tlp(blocklist),
-            'severity': get_severity(blocklist),
+            'severity': current_app.config['SEVERITY_MAPPING']
+            [blocklist['sensitivity']],
             **current_app.config['CTIM_SIGHTING_DEFAULTS']
         }
         for blocklist in details

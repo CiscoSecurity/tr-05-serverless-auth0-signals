@@ -69,50 +69,20 @@ def auth0_signals_response_ok():
                     "country": "UA",
                     "country_names": {
                         "de": "Ukraine",
-                        "en": "Ukraine",
-                        "es": "Ucrania",
-                        "fr": "Ukraine",
-                        "ja": "ウクライナ共和国",
-                        "pt-BR": "Ucrânia",
-                        "ru": "Украина",
-                        "zh-CN": "乌克兰"
+                        "en": "Ukraine"
                     },
                     "country_geoname_id": 690791,
                     "continent": "EU",
                     "continent_names": {
                         "de": "Europa",
-                        "en": "Europe",
-                        "es": "Europa",
-                        "fr": "Europe",
-                        "ja": "ヨーロッパ",
-                        "pt-BR": "Europa",
-                        "ru": "Европа",
-                        "zh-CN": "欧洲"
-                    },
-                    "continent_geoname_id": 6255148,
-                    "latitude": 0,
-                    "longitude": 0,
-                    "time_zone": "Europe/Kiev",
-                    "region": "Vinnytsya Oblast",
-                    "region_names": {
-                        "de": "Oblast Winnyzja",
-                        "en": "Vinnytsya Oblast",
-                        "fr": "Oblast de Vinnytsia",
-                        "ru": "Винницкая область"
+                        "en": "Europe"
                     },
                     "region_geoname_id": 689559,
                     "city": "Vinnytsia",
                     "city_names": {
                         "de": "Winnyzja",
-                        "en": "Vinnytsia",
-                        "fr": "Vinnytsia",
-                        "ja": "ヴィーンヌィツャ",
-                        "ru": "Винница",
-                        "zh-CN": "文尼察"
-                    },
-                    "city_geoname_id": 689558,
-                    "accuracy_radius": 50,
-                    "postal": ""
+                        "en": "Vinnytsia"
+                    }
                 },
                 "hostname": "79.143.44.122.vntp.net",
                 "baddomain": {
@@ -158,103 +128,10 @@ def auth0_signals_response_ok():
                             "command": "rem",
                             "blacklists": "STOPFORUMSPAM-365",
                             "blacklist_change": "FAIL2BAN-SSH"
-                        },
-                        {
-                            "ip": "79.143.44.122",
-                            "timestamp": 1594775876499,
-                            "command": "add",
-                            "blacklists": "FAIL2BAN-SSH,STOPFORUMSPAM-365",
-                            "blacklist_change": "FAIL2BAN-SSH"
-                        },
-                        {
-                            "ip": "79.143.44.122",
-                            "timestamp": 1594772391133,
-                            "command": "rem",
-                            "blacklists": "STOPFORUMSPAM-365",
-                            "blacklist_change": "FAIL2BAN-SSH"
-                        },
-                        {
-                            "ip": "79.143.44.122",
-                            "timestamp": 1594657257051,
-                            "command": "add",
-                            "blacklists": "FAIL2BAN-SSH,STOPFORUMSPAM-365",
-                            "blacklist_change": "FAIL2BAN-SSH"
                         }
                     ],
-
-
                 },
                 "score": -2,
-                "whois": {
-
-                    "asn_registry": "ripencc",
-                    "asn": "24945",
-                    "asn_cidr": "79.143.32.0/20",
-                    "asn_country_code": "UA",
-                    "asn_date": "2007-11-20",
-                    "asn_description": "ASN-VNTP, UA",
-                    "query": "79.143.44.122",
-                    "network": {
-                        "handle": "79.143.44.0 - 79.143.47.255",
-                        "events": [
-                            {
-                                "action": "last changed",
-                                "timestamp": "2011-01-26T16:33:27Z",
-                            }
-                        ],
-                        "start_address": "79.143.44.0",
-                        "end_address": "79.143.47.255",
-                        "cidr": "79.143.44.0/22",
-                        "ip_version": "v4",
-                        "type": "ASSIGNED PA",
-                        "name": "VNTPNET",
-                        "country": "UA",
-                        "parent_handle": "79.143.32.0 - 79.143.47.255"
-                    },
-                    "entities": [
-                        "MY900-RIPE",
-                        "SV900-RIPE",
-                        "VNTPNET-MNT",
-                        "AR17468-RIPE"
-                    ],
-                    "objects": {
-                        "MY900-RIPE": {
-                            "handle": "MY900-RIPE",
-                            "roles": [
-                                "administrative"
-                            ],
-                        },
-                        "SV900-RIPE": {
-                            "handle": "SV900-RIPE",
-                        },
-                        "VNTPNET-MNT": {
-                            "handle": "VNTPNET-MNT",
-                        },
-                        "AR17468-RIPE": {
-                            "handle": "AR17468-RIPE",
-                            "roles": [
-                                "abuse"
-                            ],
-                            "contact": {
-                                "name": "Abuse-C Role",
-                                "kind": "group",
-                                "email": [
-                                    {
-                                        "type": "email",
-                                        "value": "michael@vinnitsa.com"
-                                    },
-                                    {
-                                        "type": "abuse",
-                                        "value": "michael@vinnitsa.com"
-                                    }
-                                ],
-                            },
-                            "entities": [
-                                "VNTPNET-MNT"
-                            ]
-                        }
-                    },
-                }
             }
         }
     )

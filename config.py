@@ -52,6 +52,8 @@ class Config:
         'priority': 90,
     }
 
+    SEVERITY_MAPPING = {'1': 'High', '5': 'Medium', '10': 'Info'}
+
     CTIM_SIGHTING_DEFAULTS = {
         'type': 'sighting',
         'count': 1,
