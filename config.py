@@ -67,6 +67,12 @@ class Config:
         'schema_version': CTIM_SCHEMA_VERSION
     }
 
+    CTIM_RELATIONSHIP_DEFAULTS = {
+        'type': 'relationship',
+        'relationship_type': 'member-of',
+        'schema_version': CTIM_SCHEMA_VERSION
+    }
+
     CTR_DEFAULT_ENTITIES_LIMIT = 100
 
     try:

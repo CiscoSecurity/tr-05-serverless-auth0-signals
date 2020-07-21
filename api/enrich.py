@@ -117,6 +117,19 @@ def extract_indicators(details):
     return docs
 
 
+def extract_relationships(sightings, indicators):
+    docs = [
+        {
+            'id': f'transient:relationships-{uuid4()}',
+            'source_ref': sighting['id'],
+            'target_ref': indicator['id'],
+            **current_app.config['CTIM_RELATIONSHIP_DEFAULTS']
+        }
+        for sighting, indicator in zip(sightings, indicators)
+    ]
+    return docs
+
+
 @enrich_api.route('/observe/observables', methods=['POST'])
 def observe_observables():
     client = Auth0SignalsClient(get_jwt())
@@ -125,6 +138,7 @@ def observe_observables():
     g.judgements = []
     g.sightings = []
     g.indicators = []
+    g.relationships = []
 
     for observable in observables:
         if observable['type'] == 'ip':
@@ -135,8 +149,13 @@ def observe_observables():
                     extract_judgements(response_data, observable)
                 )
                 details = client.get_full_details(response_data)
-                g.sightings.extend(extract_sightings(details))
-                g.indicators.extend(extract_indicators(details))
+                sightings = extract_sightings(details)
+                g.sightings.extend(sightings)
+                indicators = extract_indicators(details)
+                g.indicators.extend(indicators)
+                g.relationships.extend(
+                    extract_relationships(sightings, indicators)
+                )
 
     return jsonify_result()
 
