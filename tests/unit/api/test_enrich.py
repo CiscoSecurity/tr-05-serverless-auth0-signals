@@ -124,8 +124,12 @@ def test_enrich_call_success_with_extended_error_handling(
             assert response['data']['sightings']['docs'][0].pop('id')
             assert response['data']['indicators']['docs'][0].pop('id')
             assert response['data']['relationships']['docs'][0].pop('id')
-            assert response['data']['relationships']['docs'][0].pop('source_ref')
-            assert response['data']['relationships']['docs'][0].pop('target_ref')
+            assert response['data']['relationships']['docs'][0].pop(
+                'source_ref'
+            )
+            assert response['data']['relationships']['docs'][0].pop(
+                'target_ref'
+            )
 
         expected_result = {}
         expected_result.update(unauthorized_creds_expected_payload)
