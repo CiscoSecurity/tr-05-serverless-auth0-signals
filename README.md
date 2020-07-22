@@ -243,6 +243,20 @@ header set to `Bearer <JWT>`.
   - Maps the fetched data into appropriate CTIM entities.
   - Returns a list per each of the following CTIM entities (if any extracted):
     - `Verdict`.
+    
+- `POST /observe/observables`
+  - Accepts a list of observables and filters out unsupported ones.
+  - Verifies the Authorization Bearer JWT and decodes it to restore the
+  original credentials.
+  - Makes a series of requests to the underlying external service to query for
+  some cyber threat intelligence data on each supported observable.
+  - Maps the fetched data into appropriate CTIM entities.
+  - Returns a list per each of the following CTIM entities (if any extracted):
+    - `Judgement`,
+    - `Verdict`,
+    - `Indicator`,
+    - `Sighting`,
+    - `Relationship`.
 
 - `POST /refer/observables`
   - Accepts a list of observables and filters out unsupported ones.
@@ -270,4 +284,37 @@ Each response from the Auth0 Signals API for the supported observables generates
   - -1: `Suspicious`
   - -2: `Suspicious`
   - -3: `Malicious`
+  
+- `Judgement` based on the element score values when they are less than 0:
+  - `.fullip.baddomain.score`
+    - `reason` "Associated hostname found on blocklist"
+  - `.fullip.badip.score`
+    - `reason` "IP found on blocklist"
+  - `.fullip.history.score`
+    - `reason` "IP found on blocklist in recent past"
+    
+- `Sighting` based on each entry in the following arrays:
+   - `.fullip.badip.blacklists`
+   - `.fullip.baddomain.domain.blacklist`
+   - `.fullip.baddomain.domain.blacklist_mx`
+   - `.fullip.baddomain.domain.blacklist_ns`
+   - a request to the `https://signals.api.auth0.com/metadata/<blocklist_type>/lists/<blocklist_id>` is made to get full details of the list
+   - the query time will map to `observed_time` `start_time` and `end_time`
+   - `description` will be `Found on blocklist`
+   - `.[].source` from the full details query will map to `source`
+   - `.[].site` from the full details query will map to `source_uri`
+  
+ - `Indicator` based on each entry in the following arrays:
+   - `.fullip.badip.blacklists`
+   - `.fullip.baddomain.domain.blacklist`
+   - `.fullip.baddomain.domain.blacklist_mx`
+   - `.fullip.baddomain.domain.blacklist_ns`
+   - a request to the `https://signals.api.auth0.com/metadata/<blocklist_type>/lists/<blocklist_id>` is made to get full details of the list
+   - `.[].source` from the full details query will map to `producer`
+   - `.[].name` from the full details query will map to `title`
+   - `Feed: .[].name` from the full details query will map to `short_description`
+   - `.[].description` from the full details query will map to `description`
+   - `.[].tags` from the full details query will map to `tags`
+  
+- `Relationship` type between `Sighting` and `Indicator` is `member-of`.
   
