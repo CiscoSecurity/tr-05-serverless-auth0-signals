@@ -294,27 +294,27 @@ Each response from the Auth0 Signals API for the supported observables generates
     - `reason` "IP found on blocklist in recent past"
     
 - `Sighting` based on the each entry in the following arrays:
-  - `.fullip.badip.blacklists`
-  - `.fullip.baddomain.domain.blacklist`
-  - `.fullip.baddomain.domain.blacklist_mx`
-  - `.fullip.baddomain.domain.blacklist_ns`
-  - a request to the `https://signals.api.auth0.com/metadata/<blocklist_type>/lists/<blocklist_id>` is done to get the full details of the list
-  - the query time will map to `observed_time` `start_time` and `end_time`
-  - `description` `Found on blocklist`
-  - `.[].source` from the full details query will map to `source`
-  - `.[].site` from the full details query will map to `source_uri`
+   - `.fullip.badip.blacklists`
+   - `.fullip.baddomain.domain.blacklist`
+   - `.fullip.baddomain.domain.blacklist_mx`
+   - `.fullip.baddomain.domain.blacklist_ns`
+   - a request to the `https://signals.api.auth0.com/metadata/<blocklist_type>/lists/<blocklist_id>` is done to get the full details of the list
+   - the query time will map to `observed_time` `start_time` and `end_time`
+   - `description` `Found on blocklist`
+   - `.[].source` from the full details query will map to `source`
+   - `.[].site` from the full details query will map to `source_uri`
   
  - `Indicator` based on the each entry in the following arrays:
-  - `.fullip.badip.blacklists`
-  - `.fullip.baddomain.domain.blacklist`
-  - `.fullip.baddomain.domain.blacklist_mx`
-  - `.fullip.baddomain.domain.blacklist_ns`
-  - a request to the `https://signals.api.auth0.com/metadata/<blocklist_type>/lists/<blocklist_id>` is done to get the full details of the list
-  - `.[].source` from the full details query will map to `producer`
-  - `.[].name` from the full details query will map to `title`
-  - `Feed: .[].name` from the full details query will map to `short_description`
-  - `.[].description` from the full details query will map to `description`
-  - `.[].tags` from the full details query will map to `tags`
+   - `.fullip.badip.blacklists`
+   - `.fullip.baddomain.domain.blacklist`
+   - `.fullip.baddomain.domain.blacklist_mx`
+   - `.fullip.baddomain.domain.blacklist_ns`
+   - a request to the `https://signals.api.auth0.com/metadata/<blocklist_type>/lists/<blocklist_id>` is done to get the full details of the list
+   - `.[].source` from the full details query will map to `producer`
+   - `.[].name` from the full details query will map to `title`
+   - `Feed: .[].name` from the full details query will map to `short_description`
+   - `.[].description` from the full details query will map to `description`
+   - `.[].tags` from the full details query will map to `tags`
   
 - `Relationship` type between `Sighting` and `Indicator` is `member-of`.
   
