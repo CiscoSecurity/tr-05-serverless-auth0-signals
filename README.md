@@ -300,7 +300,7 @@ Each response from the Auth0 Signals API for the supported observables generates
    - `.fullip.baddomain.domain.blacklist_ns`
    - a request to the `https://signals.api.auth0.com/metadata/<blocklist_type>/lists/<blocklist_id>` is done to get the full details of the list
    - the query time will map to `observed_time` `start_time` and `end_time`
-   - `description` `Found on blocklist`
+   - `description` will be `Found on blocklist`
    - `.[].source` from the full details query will map to `source`
    - `.[].site` from the full details query will map to `source_uri`
   
