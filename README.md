@@ -243,6 +243,20 @@ header set to `Bearer <JWT>`.
   - Maps the fetched data into appropriate CTIM entities.
   - Returns a list per each of the following CTIM entities (if any extracted):
     - `Verdict`.
+    
+- `POST /observe/observables`
+  - Accepts a list of observables and filters out unsupported ones.
+  - Verifies the Authorization Bearer JWT and decodes it to restore the
+  original credentials.
+  - Makes a series of requests to the underlying external service to query for
+  some cyber threat intelligence data on each supported observable.
+  - Maps the fetched data into appropriate CTIM entities.
+  - Returns a list per each of the following CTIM entities (if any extracted):
+    - `Judgement`,
+    - `Verdict`,
+    - `Indicator`,
+    - `Sighting`,
+    - `Relationship`.
 
 - `POST /refer/observables`
   - Accepts a list of observables and filters out unsupported ones.
