@@ -398,7 +398,13 @@ def success_observe_body():
                         "source_uri": "http://www.blocklist.de",
                         "type": "sighting",
                         "tlp": "white",
-                        "severity": "High"
+                        "severity": "High",
+                        "observables": [
+                            {
+                                "type": "ip",
+                                "value": "1.1.1.1"
+                            }
+                        ],
                     }
                 ]
             },
