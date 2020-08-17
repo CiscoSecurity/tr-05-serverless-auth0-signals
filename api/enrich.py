@@ -79,7 +79,7 @@ def get_tlp(blocklist):
     return 'amber'
 
 
-def extract_sightings(details):
+def extract_sightings(observable, details):
     start_time = time_to_ctr_format(datetime.utcnow())
     docs = [
         {
@@ -89,6 +89,7 @@ def extract_sightings(details):
                 'start_time': start_time,
                 'end_time': start_time,
             },
+            'observables': [observable],
             'id': f'transient:sighting-{uuid4()}',
             'tlp': get_tlp(blocklist),
             'severity': current_app.config['SEVERITY_MAPPING']
@@ -149,7 +150,7 @@ def observe_observables():
                     extract_judgements(response_data, observable)
                 )
                 details = client.get_full_details(response_data)
-                sightings = extract_sightings(details)
+                sightings = extract_sightings(observable, details)
                 g.sightings.extend(sightings)
                 indicators = extract_indicators(details)
                 g.indicators.extend(indicators)
