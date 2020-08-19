@@ -1,4 +1,5 @@
 import os
+from datetime import timedelta
 
 from version import VERSION
 
@@ -80,3 +81,5 @@ class Config:
         assert CTR_ENTITIES_LIMIT > 0
     except (KeyError, ValueError, AssertionError):
         CTR_ENTITIES_LIMIT = CTR_DEFAULT_ENTITIES_LIMIT
+
+    ENTITY_RELEVANCE_PERIOD = timedelta(days=7)

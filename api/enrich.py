@@ -1,5 +1,5 @@
 from functools import partial
-from datetime import datetime, timedelta
+from datetime import datetime
 from uuid import uuid4
 
 from flask import Blueprint, g, current_app
@@ -12,11 +12,19 @@ enrich_api = Blueprint('enrich', __name__)
 
 
 get_observables = partial(get_json, schema=ObservableSchema(many=True))
-JUDJEMENT_RELEVANCE_PERIOD = timedelta(days=7)
 
 
 def time_to_ctr_format(time):
     return time.isoformat() + 'Z'
+
+
+def get_valid_time():
+    start_time = datetime.utcnow()
+    end_time = start_time + current_app.config['ENTITY_RELEVANCE_PERIOD']
+    return {
+        'start_time': time_to_ctr_format(start_time),
+        'end_time': time_to_ctr_format(end_time),
+    }
 
 
 def extract_verdict(output, observable):
@@ -27,7 +35,7 @@ def extract_verdict(output, observable):
             current_app.config['SCORE_MAPPING'][score]['disposition'],
         'disposition_name':
             current_app.config['SCORE_MAPPING'][score]['disposition_name'],
-        'valid_time': {},
+        'valid_time': get_valid_time(),
         'type': 'verdict'
     }
 
@@ -50,8 +58,6 @@ def deliberate_observables():
 
 
 def extract_judgements(output, observable):
-    start_time = datetime.utcnow()
-    end_time = start_time + JUDJEMENT_RELEVANCE_PERIOD
     docs = [
         {
             'observable': observable,
@@ -60,10 +66,7 @@ def extract_judgements(output, observable):
                 value=observable['value']
             ),
             'id': f'transient:judgement-{uuid4()}',
-            'valid_time': {
-                'start_time': time_to_ctr_format(start_time),
-                'end_time': time_to_ctr_format(end_time),
-            },
+            'valid_time': get_valid_time(),
             **current_app.config['CTIM_JUDGEMENT_DEFAULTS']
         }
         for score_element in current_app.config['REASON_MAPPING']

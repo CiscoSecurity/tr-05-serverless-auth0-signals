@@ -316,7 +316,6 @@ def success_deliberate_body():
                             "value": "1.1.1.1"
                         },
                         "type": "verdict",
-                        "valid_time": {}
                     }
                 ]
             }
@@ -443,7 +442,6 @@ def success_observe_body():
                             "value": "1.1.1.1"
                         },
                         "type": "verdict",
-                        "valid_time": {}
                     }
                 ]
             },

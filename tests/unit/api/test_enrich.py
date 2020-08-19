@@ -65,17 +65,26 @@ def test_enrich_call_success(
     response = response.get_json()
     assert response.get('errors') is None
 
-    if route == '/observe/observables':
-        assert response['data']['judgements']['docs'][0].pop('valid_time')
-        assert response['data']['judgements']['docs'][0].pop('id')
-        assert response['data']['judgements']['docs'][1].pop('valid_time')
-        assert response['data']['judgements']['docs'][1].pop('id')
-        assert response['data']['sightings']['docs'][0].pop('observed_time')
-        assert response['data']['sightings']['docs'][0].pop('id')
-        assert response['data']['indicators']['docs'][0].pop('id')
-        assert response['data']['relationships']['docs'][0].pop('id')
-        assert response['data']['relationships']['docs'][0].pop('source_ref')
-        assert response['data']['relationships']['docs'][0].pop('target_ref')
+    if route in ('/deliberate/observables', '/observe/observables'):
+        assert response['data']['verdicts']['docs'][0].pop('valid_time')
+
+        if route == '/observe/observables':
+            assert response['data']['judgements']['docs'][0].pop('valid_time')
+            assert response['data']['judgements']['docs'][0].pop('id')
+            assert response['data']['judgements']['docs'][1].pop('valid_time')
+            assert response['data']['judgements']['docs'][1].pop('id')
+            assert response['data']['sightings']['docs'][0].pop(
+                'observed_time'
+            )
+            assert response['data']['sightings']['docs'][0].pop('id')
+            assert response['data']['indicators']['docs'][0].pop('id')
+            assert response['data']['relationships']['docs'][0].pop('id')
+            assert response['data']['relationships']['docs'][0].pop(
+                'source_ref'
+            )
+            assert response['data']['relationships']['docs'][0].pop(
+                'target_ref'
+            )
 
     assert response == success_enrich_expected_payload
 
@@ -113,23 +122,30 @@ def test_enrich_call_success_with_extended_error_handling(
 
         response = response.get_json()
 
-        if route == '/observe/observables':
-            assert response['data']['judgements']['docs'][0].pop('valid_time')
-            assert response['data']['judgements']['docs'][0].pop('id')
-            assert response['data']['judgements']['docs'][1].pop('valid_time')
-            assert response['data']['judgements']['docs'][1].pop('id')
-            assert response['data']['sightings']['docs'][0].pop(
-                'observed_time'
-            )
-            assert response['data']['sightings']['docs'][0].pop('id')
-            assert response['data']['indicators']['docs'][0].pop('id')
-            assert response['data']['relationships']['docs'][0].pop('id')
-            assert response['data']['relationships']['docs'][0].pop(
-                'source_ref'
-            )
-            assert response['data']['relationships']['docs'][0].pop(
-                'target_ref'
-            )
+        if route in ('/deliberate/observables', '/observe/observables'):
+            assert response['data']['verdicts']['docs'][0].pop('valid_time')
+
+            if route == '/observe/observables':
+                assert response['data']['judgements']['docs'][0].pop(
+                    'valid_time'
+                )
+                assert response['data']['judgements']['docs'][0].pop('id')
+                assert response['data']['judgements']['docs'][1].pop(
+                    'valid_time'
+                )
+                assert response['data']['judgements']['docs'][1].pop('id')
+                assert response['data']['sightings']['docs'][0].pop(
+                    'observed_time'
+                )
+                assert response['data']['sightings']['docs'][0].pop('id')
+                assert response['data']['indicators']['docs'][0].pop('id')
+                assert response['data']['relationships']['docs'][0].pop('id')
+                assert response['data']['relationships']['docs'][0].pop(
+                    'source_ref'
+                )
+                assert response['data']['relationships']['docs'][0].pop(
+                    'target_ref'
+                )
 
         expected_result = {}
         expected_result.update(unauthorized_creds_expected_payload)
