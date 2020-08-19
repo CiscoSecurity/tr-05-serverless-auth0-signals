@@ -1,5 +1,5 @@
 from functools import partial
-from datetime import datetime, timedelta
+from datetime import datetime
 from uuid import uuid4
 
 from flask import Blueprint, g, current_app
@@ -12,7 +12,6 @@ enrich_api = Blueprint('enrich', __name__)
 
 
 get_observables = partial(get_json, schema=ObservableSchema(many=True))
-ENTITY_RELEVANCE_PERIOD = timedelta(days=7)
 
 
 def time_to_ctr_format(time):
@@ -21,7 +20,7 @@ def time_to_ctr_format(time):
 
 def get_valid_time():
     start_time = datetime.utcnow()
-    end_time = start_time + ENTITY_RELEVANCE_PERIOD
+    end_time = start_time + current_app.config['ENTITY_RELEVANCE_PERIOD']
     return {
         'start_time': time_to_ctr_format(start_time),
         'end_time': time_to_ctr_format(end_time),
