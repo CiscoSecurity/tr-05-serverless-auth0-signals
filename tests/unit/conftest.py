@@ -1,6 +1,7 @@
 from datetime import datetime
 from http import HTTPStatus
 from unittest.mock import MagicMock
+from requests.exceptions import SSLError
 
 from authlib.jose import jwt
 from pytest import fixture
@@ -321,6 +322,35 @@ def success_deliberate_body():
             }
         }
     }
+
+
+@fixture(scope='session')
+def auth0_ssl_exception_mock(secret_key):
+    mock_exception = MagicMock()
+    mock_exception.reason.args.__getitem__().verify_message \
+        = 'self signed certificate'
+    return SSLError(mock_exception)
+
+
+@fixture(scope='module')
+def ssl_error_expected_payload(route, client):
+    if route in ('/observe/observables', '/health'):
+        return {
+            'data': {},
+            'errors': [
+                {
+                    'code': 'unknown',
+                    'message': 'Unable to verify SSL certificate: '
+                               'Self signed certificate',
+                    'type': 'fatal'
+                }
+            ]
+        }
+
+    if route.endswith('/deliberate/observables'):
+        return {'data': {}}
+
+    return {'data': []}
 
 
 @fixture(scope='module')

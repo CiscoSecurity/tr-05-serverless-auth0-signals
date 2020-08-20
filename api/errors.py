@@ -47,3 +47,13 @@ class CriticalError(TRFormattedError):
             response.reason,
             f'Unexpected response from Auth0 Signals: {response.text}'
         )
+
+
+class Auth0SSLError(TRFormattedError):
+    def __init__(self, error):
+        error = error.args[0].reason.args[0]
+        message = getattr(error, 'verify_message', error.args[0]).capitalize()
+        super().__init__(
+            UNKNOWN,
+            f'Unable to verify SSL certificate: {message}'
+        )

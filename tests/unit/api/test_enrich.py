@@ -152,3 +152,22 @@ def test_enrich_call_success_with_extended_error_handling(
         expected_result.update(success_enrich_expected_payload)
 
         assert response == expected_result
+
+
+@patch('requests.get')
+def test_enrich_with_ssl_error(
+        mock_request, route, client, valid_jwt,
+        valid_json, auth0_ssl_exception_mock,
+        ssl_error_expected_payload
+):
+    if route == '/observe/observables':
+        mock_request.side_effect = auth0_ssl_exception_mock
+
+        response = client.post(
+            route, headers=headers(valid_jwt), json=valid_json
+        )
+
+        assert response.status_code == HTTPStatus.OK
+
+        response = response.get_json()
+        assert response == ssl_error_expected_payload

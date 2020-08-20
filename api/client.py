@@ -4,7 +4,7 @@ from http import HTTPStatus
 from flask import current_app
 
 from api.errors import CriticalError
-from api.utils import join_url
+from api.utils import join_url, ssl_error_handler
 
 
 NOT_CRITICAL_ERRORS = (HTTPStatus.BAD_REQUEST, HTTPStatus.NOT_FOUND)
@@ -20,6 +20,7 @@ class Auth0SignalsClient:
         }
         self.limit = current_app.config['CTR_ENTITIES_LIMIT']
 
+    @ssl_error_handler
     def get(self, observable):
         url = join_url(self.api_url, 'v2.0', 'ip', observable['value'])
 
@@ -33,6 +34,7 @@ class Auth0SignalsClient:
 
         raise CriticalError(response)
 
+    @ssl_error_handler
     def check_health(self):
         url = join_url(self.api_url, 'v2.0', 'ip')
 
@@ -41,6 +43,7 @@ class Auth0SignalsClient:
         if not response.ok:
             raise CriticalError(response)
 
+    @ssl_error_handler
     def get_details_of_the_list(self, blocklist_type, blocklist_id):
         url = join_url(
             self.api_url, 'metadata', blocklist_type, 'lists', blocklist_id

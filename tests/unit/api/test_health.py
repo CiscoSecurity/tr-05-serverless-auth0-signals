@@ -60,3 +60,21 @@ def test_health_call_success(
 
     assert response.status_code == HTTPStatus.OK
     assert response.json == {'data': {'status': 'ok'}}
+
+
+@patch('requests.get')
+def test_health_with_ssl_error(
+        mock_request, route, client, valid_jwt,
+        auth0_ssl_exception_mock,
+        ssl_error_expected_payload
+):
+    mock_request.side_effect = auth0_ssl_exception_mock
+
+    response = client.post(
+        route, headers=headers(valid_jwt)
+    )
+
+    assert response.status_code == HTTPStatus.OK
+
+    response = response.get_json()
+    assert response == ssl_error_expected_payload
