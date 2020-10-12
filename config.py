@@ -1,5 +1,6 @@
 import os
 from datetime import timedelta
+from uuid import NAMESPACE_X500
 
 from version import VERSION
 
@@ -83,3 +84,5 @@ class Config:
         CTR_ENTITIES_LIMIT = CTR_DEFAULT_ENTITIES_LIMIT
 
     ENTITY_RELEVANCE_PERIOD = timedelta(days=7)
+
+    NAMESPACE_BASE = NAMESPACE_X500
