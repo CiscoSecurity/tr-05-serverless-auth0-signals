@@ -1,6 +1,6 @@
 from functools import partial
 from datetime import datetime
-from uuid import uuid4
+from uuid import uuid4, uuid5
 
 from flask import Blueprint, g, current_app
 
@@ -104,13 +104,19 @@ def extract_sightings(observable, details):
     return docs
 
 
+def get_transient_id(entity_type, base_value=None):
+    uuid = (uuid5(current_app.config['NAMESPACE_BASE'], base_value)
+            if base_value else uuid4())
+    return f'transient:{entity_type}-{uuid}'
+
+
 def extract_indicators(details):
     docs = [
         {
             'producer': blocklist['source'],
             'title': blocklist['name'],
             'valid_time': {},
-            'id': f'transient:indicator-{uuid4()}',
+            'id': get_transient_id('indicator', blocklist['name']),
             'short_description': f'Feed: {blocklist["name"]}',
             'description': blocklist['description'],
             'tags': blocklist['tags'].split(','),
