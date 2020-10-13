@@ -50,7 +50,7 @@ def deliberate_observables():
 
     for observable in observables:
         if observable['type'] == 'ip':
-            response_data = client.get(observable)
+            response_data = client.get_auth0_response(observable)
             if response_data:
                 g.verdicts.append(extract_verdict(response_data, observable))
 
@@ -152,7 +152,7 @@ def observe_observables():
 
     for observable in observables:
         if observable['type'] == 'ip':
-            response_data = client.get(observable)
+            response_data = client.get_auth0_response(observable)
             if response_data:
                 g.verdicts.append(extract_verdict(response_data, observable))
                 g.judgements.extend(
