@@ -8,7 +8,7 @@ from version import VERSION
 class Config:
     VERSION = VERSION
 
-    SECRET_KEY = os.environ.get('SECRET_KEY', '')
+    SECRET_KEY = os.environ.get('SECRET_KEY', None)
 
     API_URL = 'https://signals.api.auth0.com/'
     UI_URL = 'https://auth0.com/signals/ip/{value}-report'
