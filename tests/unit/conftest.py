@@ -6,7 +6,7 @@ from requests.exceptions import SSLError
 from authlib.jose import jwt
 from pytest import fixture
 
-from api.errors import UNAUTHORIZED, INVALID_ARGUMENT, PERMISSION_DENIED
+from api.errors import INVALID_ARGUMENT, AUTH_ERROR
 from app import app
 
 
@@ -30,7 +30,7 @@ def client(secret_key):
 def valid_jwt(client):
     header = {'alg': 'HS256'}
 
-    payload = {'username': 'gdavoian', 'superuser': False}
+    payload = {'key': 'test_api_key'}
 
     secret_key = client.application.secret_key
 
@@ -264,11 +264,27 @@ def auth0_signals_bad_request(secret_key):
 
 
 @fixture(scope='module')
+def authorization_header_is_missing_expected_payload(route):
+    return {
+            'errors': [
+                {
+                    'code': 'authorization error',
+                    'message': 'Authorization failed: '
+                               'Authorization header is missing',
+                    'type': 'fatal'
+                },
+            ],
+            'data': {}
+        }
+
+
+@fixture(scope='module')
 def invalid_jwt_expected_payload(route):
     return {
         'errors': [
-            {'code': PERMISSION_DENIED,
-             'message': 'Invalid Authorization Bearer JWT.',
+            {'code': AUTH_ERROR,
+             'message': 'Authorization failed: '
+                        'Failed to decode JWT with provided key',
              'type': 'fatal'}
         ],
         'data': {}
@@ -293,9 +309,9 @@ def invalid_json_expected_payload(route):
 def unauthorized_creds_expected_payload(route):
     return {
         'errors': [
-            {'code': UNAUTHORIZED,
-             'message': ('Unexpected response from Auth0 Signals: '
-                         'Unauthorized. API Key not found.'),
+            {'code': AUTH_ERROR,
+             'message': 'Authorization failed: '
+                        'Unauthorized. API Key not found.',
              'type': 'fatal'}
         ],
         'data': {}
